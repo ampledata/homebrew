@@ -13,10 +13,10 @@ class Distribute < Formula
   md5 '17722b22141aba8235787f79800cc452'
 end
 
-class Python < Formula
-  url 'http://www.python.org/ftp/python/2.7.2/Python-2.7.2.tar.bz2'
+class Python26 < Formula
+  url 'http://www.python.org/ftp/python/2.6.7/Python-2.6.7.tar.bz2'
   homepage 'http://www.python.org/'
-  md5 'ba7b2f11ffdbf195ee0d111b9455a5bd'
+  md5 'd40ef58ed88438a870bbeb0ac5d4217b'
 
   depends_on 'readline' => :optional # Prefer over OS X's libedit
   depends_on 'sqlite'   => :optional # Prefer over OS X's older version
@@ -73,7 +73,7 @@ class Python < Formula
 
     # Post-install, fix up the site-packages and install-scripts folders
     # so that user-installed Python software survives minor updates, such
-    # as going from 2.7.0 to 2.7.1.
+    # as going from 2.6.0 to 2.6.1.
 
     # Remove the site-packages that Python created in its Cellar.
     site_packages.rmtree
@@ -88,12 +88,12 @@ class Python < Formula
     # https://github.com/mxcl/homebrew/issues/6176
     if not as_framework?
       (bin+"pythonw").make_link bin+"python"
-      (bin+"pythonw2.7").make_link bin+"python2.7"
+      (bin+"pythonw2.6").make_link bin+"python2.6"
     end
 
     # Tell distutils-based installers where to put scripts
     scripts_folder.mkpath
-    (effective_lib+"python2.7/distutils/distutils.cfg").write <<-EOF.undent
+    (effective_lib+"python2.6/distutils/distutils.cfg").write <<-EOF.undent
       [install]
       install-scripts=#{scripts_folder}
     EOF
@@ -119,7 +119,7 @@ class Python < Formula
 
     general_caveats = <<-EOS.undent
       A "distutils.cfg" has been written to:
-        #{effective_lib}/python2.7/distutils
+        #{effective_lib}/python2.6/distutils
       specifing the install-scripts folder as:
         #{scripts_folder}
 
@@ -143,19 +143,19 @@ class Python < Formula
   # lib folder,taking into account whether we are a Framework build or not
   def effective_lib
     # If we're installed or installing as a Framework, then use that location.
-    return prefix+"Frameworks/Python.framework/Versions/2.7/lib" if as_framework?
+    return prefix+"Frameworks/Python.framework/Versions/2.6/lib" if as_framework?
     # Otherwise use just 'lib'
     return lib
   end
 
   # The Cellar location of site-packages
   def site_packages
-    effective_lib+"python2.7/site-packages"
+    effective_lib+"python2.6/site-packages"
   end
 
   # The HOMEBREW_PREFIX location of site-packages
   def prefix_site_packages
-    HOMEBREW_PREFIX+"lib/python2.7/site-packages"
+    HOMEBREW_PREFIX+"lib/python2.6/site-packages"
   end
 
   # Where distribute will install executable scripts
